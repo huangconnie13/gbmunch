@@ -1,0 +1,606 @@
+[
+ {
+  "handle": "3dprintuf",
+  "org": "3D Printing Club"
+ },
+ {
+  "handle": "adpiuf",
+  "org": "ALPHA DELTA PI"
+ },
+ {
+  "handle": "alphachisigmauf",
+  "org": "Alpha Chi Sigma - Beta Iota Chapter"
+ },
+ {
+  "handle": "anisong.uf",
+  "org": "Anisong Ensemble"
+ },
+ {
+  "handle": "badassocietyclub",
+  "org": "Bachelor of Arts in Digital Arts and Sciences Society"
+ },
+ {
+  "handle": "bridgeusaatuf",
+  "org": "BridgeUSA"
+ },
+ {
+  "handle": "commonground_uf",
+  "org": "Common Ground FL"
+ },
+ {
+  "handle": "deltanuzetauf",
+  "org": "Delta Nu Zeta - Beta Chapter"
+ },
+ {
+  "handle": "digitalworldsambassadors",
+  "org": "Digital Worlds Student Ambassadors"
+ },
+ {
+  "handle": "eig_uf",
+  "org": "Embodied Intelligence Group"
+ },
+ {
+  "handle": "englishsocietyuf",
+  "org": "The English Society"
+ },
+ {
+  "handle": "esa.ufl",
+  "org": "Egyptian Student Association"
+ },
+ {
+  "handle": "extremedanceuf",
+  "org": "Extreme Dance Company"
+ },
+ {
+  "handle": "fass_uf",
+  "org": "Florida Actuarial Student Society"
+ },
+ {
+  "handle": "fbc_uf",
+  "org": "Florida Business Connection"
+ },
+ {
+  "handle": "fbls_uf",
+  "org": "Florida Business Leadership Society"
+ },
+ {
+  "handle": "femaleleadership_charityclub",
+  "org": "Female Leadership & Charity Club"
+ },
+ {
+  "handle": "fijiuf",
+  "org": "PHI GAMMA DELTA (FIJI)"
+ },
+ {
+  "handle": "florida_atsa",
+  "org": "Athletic Training Student Association"
+ },
+ {
+  "handle": "florida.flyers",
+  "org": "Florida Flyers"
+ },
+ {
+  "handle": "floridadelight",
+  "org": "Delight"
+ },
+ {
+  "handle": "floridaplayers",
+  "org": "Florida Players"
+ },
+ {
+  "handle": "fnpc_uf",
+  "org": "Florida Native Plant Club"
+ },
+ {
+  "handle": "fomc1234",
+  "org": "Future of Manufacturing Club"
+ },
+ {
+  "handle": "foster.uf",
+  "org": "FOSTER"
+ },
+ {
+  "handle": "gammaetauf",
+  "org": "GAMMA ETA"
+ },
+ {
+  "handle": "gator_battlebots",
+  "org": "Gator Robotics"
+ },
+ {
+  "handle": "gator_geometrydash",
+  "org": "Gator Geometry Dash"
+ },
+ {
+  "handle": "gatoraises",
+  "org": "Gator Chapter of the Advancing Indigenous Science and Engineering Society "
+ },
+ {
+  "handle": "gatorgaminguf",
+  "org": "Gator Gaming"
+ },
+ {
+  "handle": "gatornaach",
+  "org": "GatorNaach "
+ },
+ {
+  "handle": "gatorsalsa.club",
+  "org": "Gator Salsa Club"
+ },
+ {
+  "handle": "gatorservicedogs",
+  "org": "Gator Service Dogs"
+ },
+ {
+  "handle": "gatorstrategygroupuf",
+  "org": "Gator Strategy Group"
+ },
+ {
+  "handle": "gatortechuf",
+  "org": "GatorTech"
+ },
+ {
+  "handle": "gatortped",
+  "org": "Gator Theme Park Engineering & Design"
+ },
+ {
+  "handle": "gdgatuf",
+  "org": "Google Developer Group on Campus"
+ },
+ {
+  "handle": "geist_uf",
+  "org": "Geist"
+ },
+ {
+  "handle": "grmruf",
+  "org": "Gator for Refugee Medical Relief "
+ },
+ {
+  "handle": "gvsurge",
+  "org": "Surge Interest Group"
+ },
+ {
+  "handle": "handmade_grace_uf",
+  "org": "Handmade Grace"
+ },
+ {
+  "handle": "hsa.uf",
+  "org": "Hispanic-Latine Student Association"
+ },
+ {
+  "handle": "intervarsitygnv",
+  "org": "InterVarsity Christian Fellowship"
+ },
+ {
+  "handle": "lettersoflove_florida",
+  "org": "Letters of Love Florida"
+ },
+ {
+  "handle": "lta_chi",
+  "org": "LAMBDA THETA ALPHA"
+ },
+ {
+  "handle": "lucero_film",
+  "org": "Lucero Films"
+ },
+ {
+  "handle": "mindbodygator",
+  "org": "Mind Body Gator"
+ },
+ {
+  "handle": "nuestracasauf",
+  "org": "Cuban American Student Association"
+ },
+ {
+  "handle": "omegaphialphauf",
+  "org": "Omega Phi Alpha"
+ },
+ {
+  "handle": "ourartcollectiveuf",
+  "org": "Our Art Collective"
+ },
+ {
+  "handle": "phisigmapiuf",
+  "org": "Phi Sigma Pi"
+ },
+ {
+  "handle": "pibetaphi",
+  "org": "PI BETA PHI"
+ },
+ {
+  "handle": "projectcommontable",
+  "org": "Project Common Table"
+ },
+ {
+  "handle": "rebuildukr",
+  "org": "Ukraine Rebuilding Initiative"
+ },
+ {
+  "handle": "redline352.uf",
+  "org": "Redline352"
+ },
+ {
+  "handle": "rufatuf",
+  "org": "Reformed University Fellowship"
+ },
+ {
+  "handle": "saltcompanygnv",
+  "org": "Students for Salt"
+ },
+ {
+  "handle": "sfa_gainesville",
+  "org": "Surfers For Autism"
+ },
+ {
+  "handle": "sigmakappauf",
+  "org": "SIGMA KAPPA"
+ },
+ {
+  "handle": "sohc.uf",
+  "org": "Students Oral History Club"
+ },
+ {
+  "handle": "solaceatuf",
+  "org": "Solace"
+ },
+ {
+  "handle": "surgicalhealthcaresociety",
+  "org": "Surgical Healthcare Society"
+ },
+ {
+  "handle": "swamprecordsuf",
+  "org": "Swamp Records"
+ },
+ {
+  "handle": "sweets4hope_nonprofit",
+  "org": "Sweets4Hope"
+ },
+ {
+  "handle": "thendalliance_uf",
+  "org": "The Neurodiversity Alliance"
+ },
+ {
+  "handle": "thetachiflorida",
+  "org": "THETA CHI"
+ },
+ {
+  "handle": "thriftclubuf",
+  "org": "Thrift Club"
+ },
+ {
+  "handle": "tkeuf",
+  "org": "TAU KAPPA EPSILON"
+ },
+ {
+  "handle": "uepauf",
+  "org": "Union de Estudiantes Puertorriquenos Activos "
+ },
+ {
+  "handle": "uf_agr",
+  "org": "ALPHA GAMMA RHO"
+ },
+ {
+  "handle": "uf_ato",
+  "org": "ALPHA TAU OMEGA"
+ },
+ {
+  "handle": "uf_beta",
+  "org": "BETA THETA PI"
+ },
+ {
+  "handle": "uf_cbob",
+  "org": "Children Beyond Our Borders "
+ },
+ {
+  "handle": "uf_dnd",
+  "org": "Disparity in Dentistry"
+ },
+ {
+  "handle": "uf_fhpra",
+  "org": "Future Healthcare Professionals for Rural America"
+ },
+ {
+  "handle": "uf_fsoac",
+  "org": "Florida Students of Accounting Council"
+ },
+ {
+  "handle": "uf_impacto",
+  "org": "IMPACTO"
+ },
+ {
+  "handle": "uf_mgc",
+  "org": "Multicultural Greek Council"
+ },
+ {
+  "handle": "uf_nlg",
+  "org": "National Lawyers Guild at UF"
+ },
+ {
+  "handle": "uf_pbm89",
+  "org": "Progressive Black Men Inc. "
+ },
+ {
+  "handle": "uf_psychclub",
+  "org": "Psychology Club"
+ },
+ {
+  "handle": "uf_sbs",
+  "org": "Surrounded By Stories, Inc."
+ },
+ {
+  "handle": "uf_unitedoncampusclub",
+  "org": "United on Campus "
+ },
+ {
+  "handle": "uf_urge",
+  "org": "University Rhythm Game Enthusiasts"
+ },
+ {
+  "handle": "uf_xtraordinary_joy",
+  "org": "Xtraordinary Joy Student Chapter"
+ },
+ {
+  "handle": "uf.bmm",
+  "org": "Black Men in Medicine "
+ },
+ {
+  "handle": "uf.fbla",
+  "org": "Future Business Leaders of America Collegiate"
+ },
+ {
+  "handle": "uf.kappa",
+  "org": "KAPPA KAPPA GAMMA"
+ },
+ {
+  "handle": "uf.shakespeare",
+  "org": "Shakespeare in the Park"
+ },
+ {
+  "handle": "uf.students.for.life",
+  "org": "Students for Life"
+ },
+ {
+  "handle": "ufacademicallies",
+  "org": "Academic Allies"
+ },
+ {
+  "handle": "ufadsociety",
+  "org": "Ad Society"
+ },
+ {
+  "handle": "ufaed",
+  "org": "Alpha Epsilon Delta"
+ },
+ {
+  "handle": "ufaepi",
+  "org": "ALPHA EPSILON PI"
+ },
+ {
+  "handle": "ufakas",
+  "org": "ALPHA KAPPA ALPHA"
+ },
+ {
+  "handle": "ufakdphi",
+  "org": "alpha KAPPA DELTA PHI"
+ },
+ {
+  "handle": "ufalphaphi",
+  "org": "ALPHA PHI"
+ },
+ {
+  "handle": "ufamcpgnv",
+  "org": "Academy of Managed Care Pharmacy"
+ },
+ {
+  "handle": "ufaoii",
+  "org": "ALPHA OMICRON PI"
+ },
+ {
+  "handle": "ufaxo",
+  "org": "ALPHA CHI OMEGA"
+ },
+ {
+  "handle": "ufbetas",
+  "org": "SIGMA LAMBDA BETA"
+ },
+ {
+  "handle": "ufbsa",
+  "org": "Bangladeshi Students' Association"
+ },
+ {
+  "handle": "ufbsib",
+  "org": "Black Students in Business"
+ },
+ {
+  "handle": "ufcalor",
+  "org": "Central Latin American Organization"
+ },
+ {
+  "handle": "ufcasa",
+  "org": "Chinese American Student Association"
+ },
+ {
+  "handle": "ufchiphi",
+  "org": "CHI PHI"
+ },
+ {
+  "handle": "ufclubswim",
+  "org": "Florida Club Swim Team"
+ },
+ {
+  "handle": "ufdeltachi",
+  "org": "DELTA CHI"
+ },
+ {
+  "handle": "ufdeltasig",
+  "org": "DELTA SIGMA PHI"
+ },
+ {
+  "handle": "ufdeltaupsilon",
+  "org": "DELTA UPSILON"
+ },
+ {
+  "handle": "ufdelts",
+  "org": "DELTA TAU DELTA"
+ },
+ {
+  "handle": "ufdeutschklub",
+  "org": "Deutschklub"
+ },
+ {
+  "handle": "ufdphie",
+  "org": "DELTA PHI EPSILON"
+ },
+ {
+  "handle": "ufethnogarden",
+  "org": "Ethnoecology Society"
+ },
+ {
+  "handle": "uffsa",
+  "org": "Filipino Student Association"
+ },
+ {
+  "handle": "ufgammaphibeta",
+  "org": "GAMMA PHI BETA"
+ },
+ {
+  "handle": "ufgatornights",
+  "org": "GatorNights"
+ },
+ {
+  "handle": "ufh4h",
+  "org": "University Habitat for Humanity"
+ },
+ {
+  "handle": "ufheal",
+  "org": "Health Educated Asian Leaders"
+ },
+ {
+  "handle": "ufhoneybeeclub",
+  "org": "The Honey Bee Club"
+ },
+ {
+  "handle": "ufhosa",
+  "org": "HOSA- Future Health Professionals"
+ },
+ {
+  "handle": "ufhprs",
+  "org": "Human Performance Research Society"
+ },
+ {
+  "handle": "ufknittinggator",
+  "org": "Knitting Gator"
+ },
+ {
+  "handle": "ufloridacca",
+  "org": "Cranes for Cancer"
+ },
+ {
+  "handle": "ufloridakpl",
+  "org": "KAPPA PHI LAMBDA"
+ },
+ {
+  "handle": "uflxa",
+  "org": "LAMBDA CHI ALPHA"
+ },
+ {
+  "handle": "ufmaa_",
+  "org": "Medical Anesthesia Association"
+ },
+ {
+  "handle": "ufmishelanu",
+  "org": "Mishelanu"
+ },
+ {
+  "handle": "ufnavs",
+  "org": "The Navigators"
+ },
+ {
+  "handle": "ufnupes",
+  "org": "KAPPA ALPHA PSI"
+ },
+ {
+  "handle": "ufpdpsi",
+  "org": "PI DELTA PSI"
+ },
+ {
+  "handle": "ufphysicaltherapy",
+  "org": "Student Physical Therapy Association"
+ },
+ {
+  "handle": "ufpolis",
+  "org": "Pi Lambda Sigma"
+ },
+ {
+  "handle": "ufpsu",
+  "org": "Pride Student Union"
+ },
+ {
+  "handle": "ufsammy",
+  "org": "SIGMA ALPHA MU"
+ },
+ {
+  "handle": "ufscioly",
+  "org": "Gator Science Olympiad"
+ },
+ {
+  "handle": "ufscp",
+  "org": "Society of Conservation Photography"
+ },
+ {
+  "handle": "ufsgrhos",
+  "org": "SIGMA GAMMA RHO"
+ },
+ {
+  "handle": "ufsigep",
+  "org": "SIGMA PHI EPSILON"
+ },
+ {
+  "handle": "ufsigmanu",
+  "org": "SIGMA NU"
+ },
+ {
+  "handle": "ufspecialolympics",
+  "org": "Special Olympics College @ UF"
+ },
+ {
+  "handle": "ufstatsclub",
+  "org": "Statistics Club"
+ },
+ {
+  "handle": "ufstudentengage",
+  "org": "Office of Community & Belonging"
+ },
+ {
+  "handle": "uftheta",
+  "org": "KAPPA ALPHA THETA"
+ },
+ {
+  "handle": "ufthetanuxi",
+  "org": "THETA NU XI"
+ },
+ {
+  "handle": "ufvso",
+  "org": "Vietnamese Student Organization"
+ },
+ {
+  "handle": "ufzetas",
+  "org": "ZETA PHI BETA"
+ },
+ {
+  "handle": "universitymathsociety",
+  "org": "University Math Society"
+ },
+ {
+  "handle": "westsidecollegegnv",
+  "org": "Westside College Ministry"
+ },
+ {
+  "handle": "zenithbiblestudy",
+  "org": "Zenith Bible Study"
+ },
+ {
+  "handle": "ztauf",
+  "org": "ZETA TAU ALPHA"
+ }
+]

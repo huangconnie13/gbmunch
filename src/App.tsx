@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Search, 
   Filter, 
@@ -19,17 +19,35 @@ import {
 import { Navbar } from './components/Navbar';
 import { GbmPostCard } from './components/GbmPostCard';
 import { DiningHoursSection } from './components/DiningHoursSection';
-import { SchedulerView } from './components/SchedulerView';
+import { WeekCalendar, postToEntry } from './components/WeekCalendar';
 import { PitchPresentationModal } from './components/PitchPresentationModal';
 import { ExportGitHubModal } from './components/ExportGitHubModal';
 import { INITIAL_GBM_POSTS } from './data/gbmPosts';
 import { CAMPUS_DINING_RESOURCES } from './data/campusDining';
-import { GbmPost, DiningResource, ScheduledMeal, DayOfWeek, DietaryTag } from './types';
+import { loadLiveGbms, LiveFeed } from './lib/gatorconnect';
+import { dropDuplicates, InstagramFeed, loadInstagram } from './lib/instagram';
+import { addDays, anchorSample, atMinutes, parseRange, startOfDay, WEEKDAYS } from './lib/time';
+import { GbmPost, DiningResource, CalendarEntry, DayOfWeek, DietaryTag } from './types';
+
+const SAMPLE_POSTS = INITIAL_GBM_POSTS.map((p) => anchorSample(p));
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'scheduler'>('home');
-  const [gbmPosts] = useState<GbmPost[]>(INITIAL_GBM_POSTS);
+  const [live, setLive] = useState<LiveFeed | null>(null);
+  const [insta, setInsta] = useState<InstagramFeed | null>(null);
   const [diningResources] = useState<DiningResource[]>(CAMPUS_DINING_RESOURCES);
+
+  useEffect(() => {
+    loadLiveGbms().then(setLive);
+    loadInstagram().then(setInsta);
+  }, []);
+
+  // Real GatorConnect + Instagram events mixed with the placeholder posts, soonest first.
+  const igPosts = useMemo(() => dropDuplicates(insta?.posts ?? [], live?.posts ?? []), [insta, live]);
+  const gbmPosts = useMemo(
+    () => [...(live?.posts ?? []), ...igPosts, ...SAMPLE_POSTS].sort((a, b) => a.startISO!.localeCompare(b.startISO!)),
+    [live, igPosts],
+  );
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,79 +62,23 @@ export default function App() {
   // Notification Toast state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Scheduled meals state with local persistence
-  const [scheduledMeals, setScheduledMeals] = useState<ScheduledMeal[]>(() => {
+  const [entries, setEntries] = useState<CalendarEntry[]>(() => {
     try {
-      const saved = localStorage.getItem('gbmunch_schedule_v2');
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      const saved = localStorage.getItem('gbmunch_calendar_v3');
+      if (saved) return JSON.parse(saved);
     } catch (e) {
       console.warn('Unable to load from localStorage', e);
     }
-    // Default initial scheduled week demonstrating value
-    return [
-      {
-        id: 'sample-1',
-        sourceId: 'gbm-1',
-        type: 'GBM',
-        title: 'Fall Kickoff & Tech Talk: AI in Production',
-        subtitle: '@acm_campus',
-        day: 'Monday',
-        timeSlot: '6:30 PM - 8:00 PM',
-        foodHighlight: 'Warm Domino’s Pepperoni & Cheese Pizza',
-        location: 'Science & Engineering Hall 1200',
-        estimatedSavings: 14,
-        dietaryTags: ['Vegetarian', 'Halal'],
-      },
-      {
-        id: 'sample-2',
-        sourceId: 'res-pantry-main',
-        type: 'Pantry',
-        title: 'Campus Basic Needs Food Pantry (The Oasis)',
-        subtitle: '100% Free Groceries & Emergency Meals',
-        day: 'Tuesday',
-        timeSlot: '11:00 AM - 12:00 PM (Weekly Restock Pickup)',
-        foodHighlight: 'Free Grocery & Fresh Produce Bag',
-        location: 'Student Services Center, Room 115',
-        estimatedSavings: 25,
-      },
-      {
-        id: 'sample-3',
-        sourceId: 'gbm-2',
-        type: 'GBM',
-        title: 'Noche de Bienvenida & Career Fair Prep',
-        subtitle: '@shpe_familia',
-        day: 'Tuesday',
-        timeSlot: '6:00 PM - 7:30 PM',
-        foodHighlight: 'Authentic Street Tacos (Al Pastor & Rajas)',
-        location: 'Student Union Ballroom B',
-        estimatedSavings: 16,
-        dietaryTags: ['Vegetarian', 'Gluten-Free'],
-      },
-      {
-        id: 'sample-4',
-        sourceId: 'gbm-4',
-        type: 'GBM',
-        title: 'Brotherhood & Sisterhood Welcome Dinner',
-        subtitle: '@campus_msa',
-        day: 'Thursday',
-        timeSlot: '6:45 PM - 8:30 PM',
-        foodHighlight: 'Halal Guys Chicken & Gyro over Yellow Rice',
-        location: 'Memorial Union Courtyard Patio',
-        estimatedSavings: 18,
-        dietaryTags: ['Halal'],
-      },
-    ];
+    return [];
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem('gbmunch_schedule_v2', JSON.stringify(scheduledMeals));
+      localStorage.setItem('gbmunch_calendar_v3', JSON.stringify(entries));
     } catch (e) {
       console.warn('Unable to save to localStorage', e);
     }
-  }, [scheduledMeals]);
+  }, [entries]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -125,167 +87,41 @@ export default function App() {
     }, 2800);
   };
 
-  // Add meal handler
-  const handleAddMeal = (mealData: Omit<ScheduledMeal, 'id'>) => {
-    const newMeal: ScheduledMeal = {
-      ...mealData,
-      id: `meal-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-    };
-    setScheduledMeals((prev) => [...prev, newMeal]);
-    showToast(`Added "${newMeal.foodHighlight}" to ${newMeal.day}'s schedule!`);
-  };
-
-  // Add post directly from card
-  const handleAddPostToSchedule = (post: GbmPost, targetDay?: DayOfWeek) => {
-    const day = targetDay || post.dayOfWeek;
-    handleAddMeal({
-      sourceId: post.id,
-      type: 'GBM',
-      title: post.title,
-      subtitle: `@${post.clubHandle}`,
-      day: day,
-      timeSlot: post.timeStr,
-      foodHighlight: post.freeFoodItem,
-      location: post.location,
-      estimatedSavings: post.estimatedValue,
-      dietaryTags: post.dietaryTags,
-    });
-  };
-
-  // Add dining resource directly
-  const handleAddResourceToSchedule = (resource: DiningResource, day: DayOfWeek) => {
-    handleAddMeal({
-      sourceId: resource.id,
-      type: resource.type === 'Pantry' ? 'Pantry' : 'Dining',
-      title: resource.name,
-      subtitle: resource.badge,
-      day: day,
-      timeSlot: resource.defaultTimeSlot,
-      foodHighlight:
-        resource.type === 'Pantry'
-          ? 'Free Weekly Groceries & Produce'
-          : 'Dining Hall Meal Session',
-      location: resource.location,
-      estimatedSavings: resource.type === 'Pantry' ? 25 : 12,
-    });
-  };
-
-  // Remove meal handler
-  const handleRemoveMeal = (id: string) => {
-    setScheduledMeals((prev) => prev.filter((m) => m.id !== id));
-    showToast('Removed meal from schedule');
-  };
-
-  // Move meal between days
-  const handleMoveMealDay = (mealId: string, newDay: DayOfWeek) => {
-    setScheduledMeals((prev) =>
-      prev.map((m) => (m.id === mealId ? { ...m, day: newDay } : m))
-    );
-    showToast(`Moved meal to ${newDay}!`);
-  };
-
-  // Clear schedule
-  const handleClearSchedule = () => {
-    if (confirm('Are you sure you want to clear your weekly meal schedule?')) {
-      setScheduledMeals([]);
-      showToast('Schedule cleared');
+  const handleAddPostToSchedule = (post: GbmPost) => {
+    if (entries.some((e) => e.sourceId === post.id)) {
+      setEntries((prev) => prev.filter((e) => e.sourceId !== post.id));
+      return showToast('Removed from your calendar');
     }
+    setEntries((prev) => [...prev, postToEntry(post)]);
+    showToast(`Added to ${post.dateStr} · ${post.timeStr.split(' - ')[0]}`);
   };
 
-  // Load sample week
-  const handleLoadSampleWeek = () => {
-    const sampleItems: ScheduledMeal[] = [
+  // Next occurrence of that weekday, at the resource's default slot.
+  const handleAddResourceToSchedule = (resource: DiningResource, day: DayOfWeek) => {
+    const today = startOfDay(new Date());
+    const date = addDays(today, (WEEKDAYS.indexOf(day) - today.getDay() + 7) % 7);
+    const [a, b] = parseRange(resource.defaultTimeSlot) ?? [12 * 60, 13 * 60];
+    setEntries((prev) => [
+      ...prev,
       {
-        id: `sample-${Date.now()}-1`,
-        sourceId: 'gbm-1',
-        type: 'GBM',
-        title: 'Fall Kickoff & Tech Talk: AI in Production',
-        subtitle: '@acm_campus',
-        day: 'Monday',
-        timeSlot: '6:30 PM - 8:00 PM',
-        foodHighlight: 'Warm Domino’s Pepperoni & Cheese Pizza',
-        location: 'Science & Engineering Hall 1200',
-        estimatedSavings: 14,
+        id: `e-${Date.now()}`,
+        sourceId: resource.id,
+        kind: resource.type === 'Pantry' ? 'Pantry' : 'Dining',
+        title: resource.name,
+        subtitle: resource.badge,
+        start: atMinutes(date, a).toISOString(),
+        end: atMinutes(date, b).toISOString(),
+        food: resource.type === 'Pantry' ? 'Free groceries & produce' : 'Dining hall meal',
+        location: resource.location,
+        savings: resource.type === 'Pantry' ? 25 : 0,
       },
-      {
-        id: `sample-${Date.now()}-2`,
-        sourceId: 'gbm-2',
-        type: 'GBM',
-        title: 'Noche de Bienvenida & Career Fair Prep',
-        subtitle: '@shpe_familia',
-        day: 'Tuesday',
-        timeSlot: '6:00 PM - 7:30 PM',
-        foodHighlight: 'Authentic Street Tacos (Al Pastor, Chicken, Rajas)',
-        location: 'Student Union Ballroom B',
-        estimatedSavings: 16,
-      },
-      {
-        id: `sample-${Date.now()}-3`,
-        sourceId: 'gbm-3',
-        type: 'GBM',
-        title: 'First General Meeting & Boba Social',
-        subtitle: '@apasu_official',
-        day: 'Wednesday',
-        timeSlot: '5:30 PM - 7:00 PM',
-        foodHighlight: 'Free Tiger Sugar Brown Sugar Boba + Spring Rolls',
-        location: 'Multicultural Center Lounge',
-        estimatedSavings: 11,
-      },
-      {
-        id: `sample-${Date.now()}-4`,
-        sourceId: 'res-pantry-main',
-        type: 'Pantry',
-        title: 'Campus Basic Needs Food Pantry (The Oasis)',
-        subtitle: '100% Free Groceries & Produce',
-        day: 'Thursday',
-        timeSlot: '11:00 AM - 12:00 PM (Weekly Restock Pickup)',
-        foodHighlight: 'Free Grocery & Fresh Produce Bag',
-        location: 'Student Services Center, Room 115',
-        estimatedSavings: 25,
-      },
-      {
-        id: `sample-${Date.now()}-5`,
-        sourceId: 'gbm-4',
-        type: 'GBM',
-        title: 'Brotherhood & Sisterhood Welcome Dinner',
-        subtitle: '@campus_msa',
-        day: 'Thursday',
-        timeSlot: '6:45 PM - 8:30 PM',
-        foodHighlight: 'Halal Guys Chicken & Gyro over Yellow Rice',
-        location: 'Memorial Union Courtyard Patio',
-        estimatedSavings: 18,
-      },
-      {
-        id: `sample-${Date.now()}-6`,
-        sourceId: 'gbm-5',
-        type: 'GBM',
-        title: 'Empowerment Brunch & Peer Mentorship Match',
-        subtitle: '@wics_community',
-        day: 'Friday',
-        timeSlot: '12:00 PM - 1:30 PM',
-        foodHighlight: 'Panera Gourmet Sandwiches, Fruit, & Salad',
-        location: 'Turing Computer Lab & Commons',
-        estimatedSavings: 15,
-      },
-      {
-        id: `sample-${Date.now()}-7`,
-        sourceId: 'gbm-10',
-        type: 'GBM',
-        title: 'Open Mic Night & Late Night Sweet Bites',
-        subtitle: '@campus_ink_guild',
-        day: 'Sunday',
-        timeSlot: '7:30 PM - 9:30 PM',
-        foodHighlight: 'Krispy Kreme Glazed Donuts & Hot Apple Cider',
-        location: 'Arts Pavilion Blackbox Stage',
-        estimatedSavings: 9,
-      },
-    ];
-    setScheduledMeals(sampleItems);
-    showToast('Loaded full sample week! 6 free meals & 1 pantry restock.');
+    ]);
+    showToast(`Added ${resource.name} to ${day}`);
   };
 
   // Filter posts
   const filteredPosts = gbmPosts.filter((post) => {
+    if (new Date(post.endISO!) < new Date()) return false;
     // Search query matches club, title, food item, or location
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
@@ -342,10 +178,8 @@ export default function App() {
     'Dairy-Free',
   ];
 
-  const totalSavedSoFar = scheduledMeals.reduce(
-    (sum, m) => sum + m.estimatedSavings,
-    0
-  );
+  const totalSavedSoFar = entries.reduce((sum, m) => sum + m.savings, 0);
+  const liveCount = live?.posts.length ?? 0;
 
   return (
     <div className="min-h-screen bg-slate-50/70 text-slate-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
@@ -353,14 +187,14 @@ export default function App() {
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        scheduledCount={scheduledMeals.length}
+        scheduledCount={entries.length}
         totalSavings={totalSavedSoFar}
         onOpenPitch={() => setShowPitchModal(true)}
         onOpenExport={() => setShowExportModal(true)}
       />
 
       {/* Main App Content */}
-      <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 w-full">
+      <main className={`flex-1 mx-auto px-4 sm:px-6 py-6 sm:py-8 w-full ${activeTab === 'scheduler' ? 'max-w-[1440px]' : 'max-w-6xl'}`}>
         {activeTab === 'home' ? (
           <div className="space-y-8">
             {/* Campus Free Food Headline & Mission Callout */}
@@ -383,7 +217,7 @@ export default function App() {
                     className="flex items-center gap-2 bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-95"
                   >
                     <Calendar className="w-4 h-4 text-orange-400" />
-                    <span>Open Weekly Scheduler ({scheduledMeals.length} planned)</span>
+                    <span>Open Weekly Calendar ({entries.length} planned)</span>
                   </button>
 
                   <button
@@ -495,8 +329,24 @@ export default function App() {
                       {filteredPosts.length} Posts
                     </span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    10 embedded student club posts with verified free food. Scroll vertically to explore.
+                  <p className="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1.5">
+                    {live === null ? (
+                      <span>Checking GatorConnect for free-food events…</span>
+                    ) : live.source === 'none' ? (
+                      <span>GatorConnect unreachable — showing featured posts only.</span>
+                    ) : (
+                      <>
+                        <span className={`w-1.5 h-1.5 rounded-full ${live.source === 'live' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                        <span>
+                          {liveCount} free-food events found in {live.scanned} upcoming GatorConnect events
+                          {live.source === 'snapshot' && live.fetchedAt
+                            ? ` (snapshot from ${new Date(live.fetchedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })})`
+                            : ' · live'}
+                          {igPosts.length > 0 && ` + ${igPosts.length} from ${insta!.handles} club Instagrams`}
+                          {' '}+ {SAMPLE_POSTS.length} featured posts
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
 
@@ -536,9 +386,7 @@ export default function App() {
                     <GbmPostCard
                       key={post.id}
                       post={post}
-                      isScheduled={scheduledMeals.some(
-                        (m) => m.sourceId === post.id
-                      )}
+                      isScheduled={entries.some((m) => m.sourceId === post.id)}
                       onAddToSchedule={handleAddPostToSchedule}
                     />
                   ))}
@@ -550,22 +398,16 @@ export default function App() {
             <DiningHoursSection
               resources={diningResources}
               onAddResourceToSchedule={handleAddResourceToSchedule}
-              isResourceScheduled={(id) =>
-                scheduledMeals.some((m) => m.sourceId === id)
-              }
+              isResourceScheduled={(id) => entries.some((m) => m.sourceId === id)}
             />
           </div>
         ) : (
-          /* Scheduler Tab: Interactive Drag & Drop Mon-Sun Planner */
-          <SchedulerView
-            gbmPosts={gbmPosts}
-            diningResources={diningResources}
-            scheduledMeals={scheduledMeals}
-            onAddMeal={handleAddMeal}
-            onRemoveMeal={handleRemoveMeal}
-            onClearSchedule={handleClearSchedule}
-            onLoadSampleWeek={handleLoadSampleWeek}
-            onMoveMealDay={handleMoveMealDay}
+          <WeekCalendar
+            posts={gbmPosts}
+            resources={diningResources}
+            entries={entries}
+            setEntries={setEntries}
+            toast={showToast}
           />
         )}
       </main>

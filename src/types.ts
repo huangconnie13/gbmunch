@@ -30,6 +30,14 @@ export interface GbmPost {
   verifiedFreeFood: boolean;
   caption: string;
   estimatedValue: number; // e.g. $12 saved
+  // Concrete occurrence. Live events carry their real time; samples are
+  // anchored to the next matching weekday at load.
+  startISO?: string;
+  endISO?: string;
+  source?: 'gatorconnect' | 'instagram' | 'sample';
+  isGbm?: boolean;
+  imageUrl?: string;
+  sourceUrl?: string;
 }
 
 export interface DiningResource {
@@ -50,16 +58,16 @@ export interface DiningResource {
   defaultTimeSlot: string;
 }
 
-export interface ScheduledMeal {
-  id: string; // unique schedule entry id
-  sourceId: string; // id of GBM post or dining hall
-  type: 'GBM' | 'Pantry' | 'Dining';
+export interface CalendarEntry {
+  id: string;
+  sourceId: string;
+  kind: 'GBM' | 'Pantry' | 'Dining';
   title: string;
   subtitle: string;
-  day: DayOfWeek;
-  timeSlot: string;
-  foodHighlight: string;
+  start: string; // ISO
+  end: string; // ISO
+  food: string;
   location: string;
-  estimatedSavings: number;
-  dietaryTags?: DietaryTag[];
+  savings: number;
+  live?: boolean;
 }

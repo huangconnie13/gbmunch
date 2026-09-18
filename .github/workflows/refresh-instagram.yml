@@ -1,0 +1,34 @@
+name: Refresh Instagram flyers
+
+# Runs Sun + Wed evenings. Each run is capped at $0.50 of Apify credit
+# (free plan = $5/month), so this stays free. Needs repo secret APIFY_TOKEN.
+on:
+  schedule:
+    - cron: '0 22 * * 0,3'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/snapshot-instagram.mjs
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          IG_MAX_USD: '0.5'
+      - name: Commit if changed
+        run: |
+          git config user.name "gbmunch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A public/data/instagram-snapshot.json public/data/ig
+          git diff --cached --quiet || git commit -m "chore: refresh Instagram flyers"
+          git pull --rebase
+          git push

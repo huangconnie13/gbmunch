@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/gc/:path*", "destination": "https://gatorconnect.ufl.edu/api/discovery/:path*" }
+  ]
+}

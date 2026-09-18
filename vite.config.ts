@@ -12,6 +12,14 @@ export default defineConfig(() => {
       },
     },
     server: {
+      // Mirrors the /api/gc rewrite in vercel.json (GatorConnect sends no CORS headers).
+      proxy: {
+        '/api/gc': {
+          target: 'https://gatorconnect.ufl.edu',
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/api\/gc/, '/api/discovery'),
+        },
+      },
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',

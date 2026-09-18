@@ -12,18 +12,17 @@ import {
   BadgeCheck, 
   DollarSign,
   GripVertical,
-  ChevronDown
+  ExternalLink,
+  Radio
 } from 'lucide-react';
-import { GbmPost, DayOfWeek } from '../types';
+import { GbmPost } from '../types';
 
 interface GbmPostCardProps {
   post: GbmPost;
   isScheduled: boolean;
-  onAddToSchedule: (post: GbmPost, targetDay?: DayOfWeek) => void;
+  onAddToSchedule: (post: GbmPost) => void;
   onDragStart?: (e: React.DragEvent, post: GbmPost) => void;
 }
-
-const DAYS: DayOfWeek[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export const GbmPostCard: React.FC<GbmPostCardProps> = ({
   post,
@@ -35,7 +34,8 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
   const [likesCount, setLikesCount] = useState(post.likesCount);
   const [saved, setSaved] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [showDaySelector, setShowDaySelector] = useState(false);
+  const isLive = post.source === 'gatorconnect' || post.source === 'instagram';
+  const startLabel = `${post.dateStr} · ${post.timeStr.split(' - ')[0]}`;
 
   const toggleLike = () => {
     if (liked) {
@@ -84,21 +84,29 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
               <span className="font-bold text-xs sm:text-sm text-slate-900 tracking-tight hover:underline cursor-pointer">
                 {post.clubHandle}
               </span>
-              <BadgeCheck className="w-3.5 h-3.5 text-blue-500 shrink-0 inline fill-blue-500/10" />
+              {isLive ? (
+                <span className="inline-flex items-center gap-0.5 text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
+                  <Radio className="w-3 h-3" />LIVE · {post.source === 'instagram' ? 'Instagram' : 'GatorConnect'}
+                </span>
+              ) : (
+                <BadgeCheck className="w-3.5 h-3.5 text-blue-500 shrink-0 inline fill-blue-500/10" />
+              )}
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60">
                 {post.category}
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium truncate max-w-[220px] sm:max-w-xs">
-              {post.clubName}
-            </p>
+            {!isLive && (
+              <p className="text-[11px] text-slate-500 font-medium truncate max-w-[220px] sm:max-w-xs">
+                {post.clubName}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Drag handle tooltip & day badge */}
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
-            {post.dayOfWeek}
+            {post.dateStr}
           </span>
           <div 
             title="Drag this post directly into the weekly scheduler"
@@ -109,7 +117,28 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
         </div>
       </div>
 
-      {/* Embedded Flyer Visual Display */}
+      {/* Real flyer: show it as-is (it already has the details), with a slim info bar. */}
+      {post.imageUrl ? (
+        <div className="relative w-full bg-slate-900 select-none">
+          <img src={post.imageUrl} alt={`${post.clubName} flyer`} referrerPolicy="no-referrer" loading="lazy" className="w-full max-h-[560px] object-contain mx-auto" />
+          <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/95 text-white text-xs font-bold shadow-lg">
+              <Sparkles className="w-3.5 h-3.5 text-yellow-200" />
+              <span>{post.verifiedFreeFood ? 'FREE FOOD · CLUB-TAGGED' : post.source === 'instagram' ? 'FREE FOOD · ON FLYER' : 'FREE FOOD MENTIONED'}</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between gap-2 px-4 py-2 bg-slate-950 text-xs text-slate-200 font-medium">
+            <span className="flex items-center gap-1.5 truncate">
+              <Clock className="w-3.5 h-3.5 text-orange-300 shrink-0" />
+              <span className="truncate">{post.dateStr} · {post.timeStr}</span>
+            </span>
+            <span className="flex items-center gap-1.5 truncate">
+              <MapPin className="w-3.5 h-3.5 text-orange-400 shrink-0" />
+              <span className="truncate">{post.location}</span>
+            </span>
+          </div>
+        </div>
+      ) : (
       <div 
         className={`relative w-full aspect-[4/3] sm:aspect-[16/10] bg-gradient-to-br ${post.flyerTheme.bgGradient} p-6 flex flex-col justify-between text-white overflow-hidden select-none`}
       >
@@ -123,7 +152,7 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
         <div className="relative z-10 flex items-center justify-between gap-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/90 text-white backdrop-blur-md text-xs font-bold shadow-lg border border-emerald-400/40">
             <Sparkles className="w-3.5 h-3.5 text-yellow-200" />
-            <span>FREE FOOD VERIFIED</span>
+            <span>{!isLive ? 'FREE FOOD VERIFIED' : post.verifiedFreeFood ? 'FREE FOOD · CLUB-TAGGED' : post.source === 'instagram' ? 'FREE FOOD · ON FLYER' : 'FREE FOOD MENTIONED'}</span>
           </div>
 
           <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white/90 text-xs font-medium border border-white/10">
@@ -135,7 +164,7 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
         {/* Center Title & Food Showcase */}
         <div className="relative z-10 my-auto">
           <p className="text-xs uppercase tracking-widest text-orange-300 font-semibold mb-1">
-            General Body Meeting
+            {post.isGbm === false ? 'Club Event' : 'General Body Meeting'}
           </p>
           <h3 className="text-xl sm:text-2xl font-black text-white leading-snug drop-shadow-md font-['Outfit']">
             {post.title}
@@ -161,6 +190,7 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
           </div>
         </div>
       </div>
+      )}
 
       {/* Free Food Highlight Banner */}
       <div className="bg-amber-50/90 border-y border-amber-200/70 px-4 py-2.5 flex items-center justify-between gap-2">
@@ -270,63 +300,31 @@ export const GbmPostCard: React.FC<GbmPostCardProps> = ({
           </div>
         </div>
 
-        {/* Action Button: Add to Scheduler */}
-        <div className="pt-2 border-t border-slate-100 flex items-center gap-2 relative">
+        {/* Action Button: Add to Calendar */}
+        <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
           <button
             id={`add-schedule-${post.id}`}
-            onClick={() => onAddToSchedule(post, post.dayOfWeek)}
+            onClick={() => onAddToSchedule(post)}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all duration-200 ${
               isScheduled
                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-100'
                 : 'bg-orange-600 hover:bg-orange-700 text-white shadow-xs hover:shadow'
             }`}
           >
-            {isScheduled ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Added to {post.dayOfWeek} Schedule</span>
-              </>
-            ) : (
-              <>
-                <CalendarPlus className="w-3.5 h-3.5" />
-                <span>Add to {post.dayOfWeek} Schedule</span>
-              </>
-            )}
+            {isScheduled ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <CalendarPlus className="w-3.5 h-3.5" />}
+            <span>{isScheduled ? `On your calendar · ${startLabel}` : `Add to calendar · ${startLabel}`}</span>
           </button>
-
-          {/* Quick Day Selector Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setShowDaySelector(!showDaySelector)}
-              title="Pick a specific day to schedule"
+          {post.sourceUrl && (
+            <a
+              href={post.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              title={post.source === 'instagram' ? 'Open on Instagram' : 'Open on GatorConnect'}
               className="p-2 text-slate-600 hover:text-slate-900 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors"
             >
-              <ChevronDown className="w-4 h-4" />
-            </button>
-
-            {showDaySelector && (
-              <div className="absolute right-0 bottom-full mb-1 w-40 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-30">
-                <p className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Schedule for:
-                </p>
-                {DAYS.map((day) => (
-                  <button
-                    key={day}
-                    onClick={() => {
-                      onAddToSchedule(post, day);
-                      setShowDaySelector(false);
-                    }}
-                    className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-orange-50 hover:text-orange-700 flex items-center justify-between ${
-                      day === post.dayOfWeek ? 'font-bold text-orange-600' : 'text-slate-700'
-                    }`}
-                  >
-                    <span>{day}</span>
-                    {day === post.dayOfWeek && <span className="text-[10px] bg-orange-100 px-1 rounded">Event</span>}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          )}
         </div>
       </div>
     </article>

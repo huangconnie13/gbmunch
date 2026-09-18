@@ -34,6 +34,27 @@ GBMunch connects college students facing financial or food insecurity with Gener
 
 ---
 
+## 📡 Live Data Pipeline ($0)
+
+GBMunch mixes three sources in one feed and calendar:
+
+| Source | How | Refresh |
+|---|---|---|
+| **GatorConnect** (UF's Campus Labs Engage) | Public discovery API, proxied through `/api/gc` (Vite proxy locally, `vercel.json` rewrite in prod). Keeps events tagged "Free Food" or whose description mentions food. | Live on every page load; `public/data/gatorconnect-snapshot.json` is the fallback, refreshed every 6h by `.github/workflows/refresh-gatorconnect.yml`. |
+| **Club Instagrams** (151 handles from GatorConnect profiles) | `scripts/snapshot-instagram.mjs` runs Apify's Instagram Post Scraper (free $5/mo credit, capped per run), OCRs flyers with tesseract.js, parses date/time/room/food with `scripts/lib/parse-post.mjs`. | Sun + Wed via `.github/workflows/refresh-instagram.yml` (needs repo secret `APIFY_TOKEN`). |
+| **Featured sample posts** | `src/data/gbmPosts.ts`, anchored to their next weekday. | — |
+
+```bash
+node scripts/snapshot-gatorconnect.mjs          # refresh GatorConnect fallback
+node scripts/instagram-handles.mjs              # rebuild the club handle list
+node scripts/snapshot-instagram.mjs --limit 5   # small paid test run (needs APIFY_TOKEN in .env.local)
+node scripts/snapshot-instagram.mjs --cached    # re-parse last scrape for $0
+```
+
+The **Weekly Scheduler** is a drag-and-drop calendar: GBMs snap to their real day and time wherever you drop them; pantries and dining halls snap to that day's open hours. Export to `.ics` for Google/Apple Calendar.
+
+---
+
 ## 📦 Export to GitHub (`GBMunchV2`)
 
 ### Option A: Using AI Studio 1-Click Export (Fastest)
