@@ -1,0 +1,6 @@
+{
+  "name": "GBMunch",
+  "description": "Campus engagement and free food discovery platform alleviating student food insecurity through GBM events and dining schedules.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
