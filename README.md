@@ -16,7 +16,7 @@ GBMunch connects college students facing financial or food insecurity with Gener
 ## 🚀 Key Features
 
 1. **Curated Instagram-Style Feed**:
-   - 10 embedded student club General Body Meeting posts featuring free Domino's pizza, street tacos, brown sugar boba, Halal Guys platters, Panera lunches, CAVA bowls, steamed dumplings, Panda Express, and acai bowls.
+   - 10+ embedded student club General Body Meeting posts featuring free Domino's pizza, street tacos, brown sugar boba, Halal Guys platters, Panera lunches, CAVA bowls, steamed dumplings, Panda Express, and acai bowls.
    - Authentic Instagram cards with likes, comments, verified badges, event flyers, room locations, and dietary tags (Vegetarian, Halal, Vegan, Gluten-Free).
 
 2. **Campus Food Pantry & Dining Schedules**:
@@ -24,7 +24,7 @@ GBMunch connects college students facing financial or food insecurity with Gener
    - Quick-add buttons to incorporate pantry restocks and dining slots into the weekly schedule.
 
 3. **Interactive Drag & Drop Weekly Scheduler (Mon–Sun)**:
-   - Drag any of the 10 GBMs or dining resources directly into specific days of the week.
+   - Drag any of the 10+ GBMs or dining resources directly into specific days of the week.
    - Touch-friendly click-to-add buttons for mobile and tablet users.
    - Real-time **Weekly Financial Savings Tracker** (e.g. $70+ saved per week) and meal coverage metrics.
    - Export schedule to clipboard or calendar text.
